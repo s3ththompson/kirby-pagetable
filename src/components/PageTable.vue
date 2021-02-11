@@ -29,7 +29,7 @@
                 <span v-if="props.column.field == 'p-cover-image' && options.showImage">
                     <k-link :to="props.row.link">
                         <figure class="k-list-item-image">
-                            <k-image v-if="props.row.image && props.row.image.url" :src="props.row.image.url" :back="props.row.image.back || 'pattern'" :cover="props.row.image.cover" />
+                            <k-image v-if="props.row.image" v-bind="imageOptions(props.row.image)" />
                             <k-icon v-else v-bind="props.row.icon" />
                         </figure>
                     </k-link>
@@ -95,6 +95,7 @@
 
 <script>
 import { VueGoodTable } from 'vue-good-table'
+
 export default {
     extends: 'k-pages-section',
     components: { VueGoodTable },
@@ -290,6 +291,20 @@ export default {
             this.$refs['table'].changePage(1)
             // store current state
             this.storeCurrentState()
+        },
+        imageOptions(image) {
+            let src    = image.list.url;
+            let srcset = image.list.srcset;
+            if (!src) {
+                return false;
+            }
+            let result = {
+                src: src,
+                srcset: srcset,
+                back: image.back || "black",
+                cover: image.cover
+            };
+            return result;
         },
     }
 };
